@@ -20,31 +20,32 @@
 - Retrieval（检索）：为了便于表示，将数据集进行如下表示，D={[M<sub>0</sub>, M<sub>1</sub>, M<sub>2</sub>, ..., M<sub>i</sub>], [N<sub>0</sub>, N<sub>1</sub>, M<sub>2</sub>, ..., N<sub>i</sub>]<sup>T</sup>}，其中M<sub>i</sub>代表花生叶片病害类型，N<sub>i</sub>是M<sub>i</sub>对应的样本数。最后，最大值N<sub>i</sub>被表示为N<sub>max</sub>，而对应于N<sub>max</sub>的类型M<sub>i</sub>{i∈[0, 4]}，其中i表示标签类别（label0：Black spot，label1：Brown spot，label2：Healthy，label3：Net spot，label4：Mosaic）。
 
 - 比例系数C的计算（Calculation of the proportional constant C）：选择N<sub>max</sub>作为分子，N<sub>i</sub>作为分母，计算比例因子C<sub>i</sub>。
-  $$
+```math
   C_i=\frac{N_{max}}{N_i}(Countdown)
   \tag{1}
-  $$
+```
   
 - Complex upsampling：根据不同的比例常数C进行不同的数据增强。
-  $$
+```math
   \begin{cases}
-  0\leq C_i\leq1,\quad Datasetunchanged\\
-  1<C_i<3,\quad Rotation\\
-  3\leq C_i<4,\quad Rotation,Contrast\\
-  4\leq C_i<5,\quad Sharpness,Rotation,Contrast
+    0\leq C_i \leq 1, & \quad \text{Datasetunchanged}\\
+    1{<} C_i {<} 3, & \quad \text{Rotation}\\
+    3\leq C_i {<} 4, & \quad \text{Rotation,Contrast}\\
+    4\leq C_i {<} 5, & \quad \text{Sharpness,Rotation,Contrast}
   \end{cases}
   \tag{2}
-  $$
+```
   
 - 平衡数据：
-  $$
-  N'=N_i*C_i
-  $$
+```math
+  N'=N_i \times C_i
+  \tag{3}
+```
   
 - 最终平衡后的数据集可以表示为：
-  $$
+```math
   D'=\{[M_0,M_1,M_2,\cdots,M_i][N'_0,N'_1,N'_2,\cdots,N'_i]^T\}
-  $$
+```
 
 - 获取到平衡后的数据集，再进行数据增强，进一步扩充数据集。
 
@@ -83,315 +84,57 @@
 
 ## 当前支持的数据平衡方法
 
-- **RandomRotate90：**旋转90度。
-
-  - <center class = "half">
-    <img src = "./示例图片/C.jpg" style="zoom:40%" align = left>
-    <img src = "./示例图片/C_R90.jpg" style="zoom:40%" align = right>
-    </center>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- **HorizontalFlip：**水平镜像翻转。
-
-  - <center class = "half">
-    <img src = "./示例图片/C.jpg" style="zoom:40%" align = left>
-    <img src = "./示例图片/C_HF.jpg" style="zoom:40%" align = right>
-    </center>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- **Sharpen：**随机锐化。
-
-  - <center class = "half">
-    <img src = "./示例图片/C.jpg" style="zoom:40%" align = left>
-    <img src = "./示例图片/C_HF.jpg" style="zoom:40%" align = right>
-    </center>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- **GaussNoise：**添加高斯噪声。
-
-  - <center class = "half">
-    <img src = "./示例图片/C.jpg" style="zoom:40%" align = left>
-    <img src = "./示例图片/C_GN.jpg" style="zoom:40%" align = right>
-    </center>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- **RandomSizedCrop：**裁剪并缩放。
-
-  - <center class = "half">
-    <img src = "./示例图片/C.jpg" style="zoom:40%" align = left>
-    <img src = "./示例图片/C_RSC.jpg" style="zoom:40%" align = right>
-    </center>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- **Blur：**模糊。
-
-  - <center class = "half">
-    <img src = "./示例图片/C.jpg" style="zoom:40%" align = left>
-    <img src = "./示例图片/C_B.jpg" style="zoom:40%" align = right>
-    </center>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- **Rotate90：** 旋转90度。
+  | Origin | Rotate90 |
+  | --- | --- |
+  | ![image](./示例图片/C.jpg) | ![image](./示例图片/C_R90.jpg) |
+
+- **HorizontalFlip：** 水平镜像翻转。
+  | Origin | HorizontalFlip |
+  | --- | --- |
+  | ![image](./示例图片/C.jpg) | ![image](./示例图片/C_HF.jpg) |
+
+- **Sharpen：** 随机锐化。
+  | Origin | Sharpen |
+  | --- | --- |
+  | ![image](./示例图片/C.jpg) | ![image](./示例图片/C_S.jpg) |
+
+- **GaussNoise：** 添加高斯噪声。
+  | Origin | GaussNoise |
+  | --- | --- |
+  | ![image](./示例图片/C.jpg) | ![image](./示例图片/C_GN.jpg) |
+
+- **RandomSizedCrop：** 裁剪并缩放。
+  | Origin | RandomSizedCrop |
+  | --- | --- |
+  | ![image](./示例图片/C.jpg) | ![image](./示例图片/C_RSC.jpg) |
+
+- **Blur：** 模糊。
+  | Origin | Blur |
+  | --- | --- |
+  | ![image](./示例图片/C.jpg) | ![image](./示例图片/C_B.jpg) |
 
 ## 当前支持的数据增强方法
 
-- **CoarseDropout：**随机遮挡。
-
-  - <center class = "half">
-    <img src = "./示例图片/C.jpg" style="zoom:40%" align = left>
-    <img src = "./示例图片/C_CD.jpg" style="zoom:40%" align = right>
-    </center>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- **RandomGridShuffle：**随机网格扰乱。
-
-  - <center class = "half">
-    <img src = "./示例图片/C.jpg" style="zoom:40%" align = left>
-    <img src = "./示例图片/C_RGS.jpg" style="zoom:40%" align = right>
-    </center>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- **ColorJitter：**随机色彩扰动。
-
-  - <center class = "half">
-    <img src = "./示例图片/C.jpg" style="zoom:40%" align = left>
-    <img src = "./示例图片/C_CJ.jpg" style="zoom:40%" align = right>
-    </center>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- **RandomShadow：**随机添加阴影。
-
-  - <center class = "half">
-    <img src = "./示例图片/L.jpg" style="zoom:40%" align = left>
-    <img src = "./示例图片/L_RS.jpg" style="zoom:40%" align = right>
-    </center>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- **CoarseDropout：** 随机遮挡。
+  | Origin | CoarseDropout |
+  | --- | --- |
+  | ![image](./示例图片/C.jpg) | ![image](./示例图片/C_CD.jpg) |
+
+- **RandomGridShuffle：** 随机网格扰乱。
+  | Origin | RandomGridShuffle |
+  | --- | --- |
+  | ![image](./示例图片/C.jpg) | ![image](./示例图片/C_RGS.jpg) |
+    
+- **ColorJitter：** 随机色彩扰动。
+  | Origin | ColorJitter |
+  | --- | --- |
+  | ![image](./示例图片/C.jpg) | ![image](./示例图片/C_CJ.jpg) |
+
+- **RandomShadow：** 随机添加阴影。
+  | Origin | RandomShadow |
+  | --- | --- |
+  | ![image](./示例图片/L.jpg) | ![image](./示例图片/L_RS.jpg) |
 
 ## 如何使用：
 
